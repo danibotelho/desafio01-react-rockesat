@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import '../styles/tasklist.scss'
+import './tasklist.scss'
 
 import { FiTrash, FiCheckSquare } from 'react-icons/fi'
 
@@ -15,15 +15,49 @@ export function TaskList() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   function handleCreateNewTask() {
-    // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+   // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+   
+   if (!newTaskTitle) return;
+   //não permite a criação do titulo vazio
+
+   
+   const newTask = {
+      id: Math.random(),
+      title: newTaskTitle,
+      isComplete: false
+    }
+    //dados de entrada da nova task, o input sera informado apenas o title.
+
+    console.log(newTask)    
+
+    setTasks(oldState => [...oldState, newTask])
+    //mantem as tasks antigas e adiciona a nova task 
+
+    setNewTaskTitle('')
+    //retorna o input para vazio,sem isso o titulo anterior permanece em tela.      
+
   }
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    
+    //faz o mapeamento pelo id, se o id for encontrado, faz o spread da task para editar.
+    //pelo o isComplete, e faz a sua negação, assim ele irá alterar o estado inicial.
+    //caso não seja o id, a taskk permanece a mesma.
+    const statusTask = tasks.map(task => task.id === id ? {
+      ...task,
+      isComplete: !task.isComplete
+    } : task)
+
+    setTasks(statusTask)
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+    //faz o filter, e retorna todas as tasks que o id for diferente do solicitado.
+    
+     const filteredTasks = tasks.filter(task => task.id !== id)
+     setTasks(filteredTasks)
   }
 
   return (
